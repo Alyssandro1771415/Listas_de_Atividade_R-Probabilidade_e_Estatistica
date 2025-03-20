@@ -173,8 +173,8 @@ head(Dados_Funcionarios)
 #a. Faça um gráfico para explorar a relação entre estas duas variáveis
 plot(Dados_Funcionarios$Salario ~ Dados_Funcionarios$Idade,
         main = "Relação entre Salário e Idade",
-        xlab = "Salário",
-        ylab = "Idade")
+        xlab = "Idade",
+        ylab = "Salário")
 
 #b. Calcule a correlação entre estas duas variáveis
 correlacao <- cor(Dados_Funcionarios$Idade, Dados_Funcionarios$Salario, use = "complete.obs")

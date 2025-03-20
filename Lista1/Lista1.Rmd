@@ -1,0 +1,249 @@
+---
+title: "Relatório 1 em R - Probabilidade e Estatística"
+output: html_notebook
+---
+<img src="https://fundac.pb.gov.br/diretas/secretaria-da-ciencia-tecnologia-inovacao-e-ensino-superior/imagens/marca-da-uepb-aplicacao-colorida-em-png-2.png/@@images/53a720ad-9964-4625-b967-70b63e10c31a.png"></img>
+<h3>* CENTRO DE CIÊNCIAS E TECNOLOGIA - CCT</h3>
+<h3>* DEPARTAMENTO DE COMPUTAÇÃO - DC</h3>
+<h3>**Aluno**: Alyssandro Dyogo Pereira Ramos</h3>
+___
+
+<h2>1 - Conhecendo a Base de Dados</h2>
+
+```{r}
+Dados_Funcionarios
+```
+
+*Base de dados de funcionários.*
+
+___
+
+<h2>2 - Análise da Distribuição do Estado Civil entre os Funcionários</h2>
+
+<h4>2.1 - Tabela de frequência absoluta:</h4>
+```{r}
+freq_absoluta_estado_civil <- table(Dados_Funcionarios$Est.civil)
+freq_relativa_estado_civil <- prop.table(freq_absoluta_estado_civil)
+
+print(freq_absoluta_estado_civil)
+```
+<h4>2.2 - Tabela de frequência relativa:</h4>
+```{r}
+print(freq_relativa_estado_civil)
+```
+
+
+```{r, fig.width=8, fig.height=4}
+par(mfrow = c(1,2))
+
+barplot(freq_absoluta_estado_civil, 
+        main = "Frequência Absoluta de Estado Civil",
+        xlab = "Estado Civil",
+        ylab = "Frequência",
+        col = rainbow(length(freq_relativa_estado_civil)),
+        border = "black")
+
+pie(freq_relativa_estado_civil,
+    main = "Distribuição do Estado Civil",
+    col = rainbow(length(freq_relativa_estado_civil)))
+
+par(mfrow = c(1,1))
+
+```
+<p>
+Podemos observar uma disparidade mínima na distribuição dos estados com uma diferença de aproximadamente **0,6%** entre eles.
+</p>
+___
+<h2>3 - Análise da Distribuição do Grau de Instrução entre os Funcionários</h2>
+
+<h4>3.1 - Tabela de frequência absoluta do grau de instrução dos funcionários:</h4>
+```{r}
+freq_absoluta_grau_instrucao <- table(Dados_Funcionarios$Inst)
+freq_relativa_grau_instrucao <- prop.table(freq_absoluta_grau_instrucao)
+
+print(freq_absoluta_grau_instrucao)
+```
+<br><br>
+<h4>3.2 - Tabela de frequência relativa do grau de instrução dos funcionários:</h4>
+```{r}
+print(freq_relativa_grau_instrucao)
+```
+```{r, fig.width=8, fig.height=4}
+
+barplot(freq_absoluta_grau_instrucao,
+        main = "Frequência Absoluta do Grau de Instrução de Funcionários",
+        xlab = "Grau de Instrucao",
+        ylab = "Frequência",
+        col = (rainbow(length(freq_relativa_grau_instrucao))),
+        border = "black")
+pie(freq_relativa_grau_instrucao,
+    main = "Distribuição do Grau de instrução de Funcionários",
+    col = (rainbow(length(freq_relativa_grau_instrucao))))
+
+```
+<p>Podemos observar que metado dos funcionários possuem formação até o 2°grau e a minoria, compondo apenas pouco mais de **16%**, tem nível superior.</p>
+___
+<h2>4 - Análise da Quantidade de Filhos dos Funcionários</h2>
+
+<h4>4.1 - Tabela de Frequência Absoluta do Número de Filhos:</h4>
+```{r}
+freq_absoluta_num_filhos <- table(Dados_Funcionarios$Filhos)
+print(freq_absoluta_num_filhos)
+```
+<h4>4.2 - Tabela de Frequência Relativa do Número de Filhos:</h4>
+```{r}
+freq_relativa_num_filhos <- prop.table(freq_absoluta_num_filhos)
+print(freq_relativa_num_filhos)
+```
+<h4>4.3 - Tabela de Frequência Relativa Acumulada do Número de Filhos:</h4>
+```{r}
+freq_absoluta_acumulada_num_filhos <- cumsum(freq_absoluta_num_filhos)
+print(freq_absoluta_acumulada_num_filhos)
+```
+<br><br>
+<h4>4.4 - Gráfico de Frequências Relativas do Número de Filhos</h4>
+```{r, fig.width=8, fig.height=4}
+barplot(freq_relativa_num_filhos,
+        main = "Frequência Relativa do Número de Filhos de Funcionários",
+        xlab = "Número de Filhos",
+        ylab = "Proporção",
+        col = (rainbow(length(freq_relativa_num_filhos))),
+        border = "black",
+        ylim = c(0, 1))
+
+barplot(cumsum(freq_relativa_num_filhos),
+        main = "Frequência Relativa Acumulada do Número de Filhos de Funcionários",
+        xlab = "Número de Filhos",
+        ylab = "Proporção Acumulada do Número de Filhos",
+        col = (rainbow(length(freq_relativa_num_filhos))),
+        border = "black",
+        ylim = c(0, 1))
+
+```
+<p>Podemos observar que **80%** dos funcionários possuem 2 filhos ou menos e apenas **20%** possuem 3 ou 5 filhos. Devemos observar ainda que 16 dos funcionários não possuem informações quanto ao número de filhos, ou seja, a margem de análise foi de apenas 20 dos 36 funcionários.</p>
+___
+<h2>5 - Análise Sobre o Salário dos Funcionários</h2>
+
+<h4>5.1 - Valor Máximo de salário Dentre os Funcionários (x1000 R$):</h4>
+```{r}
+valor_maximo_salario <- max(Dados_Funcionarios$Salario)
+print(valor_maximo_salario)
+```
+<h4>5.2 - Valor Mínimo de Salário Dentre os Funcionários (x1000 R$):</h4>
+```{r}
+valor_minimo_salario <- min(Dados_Funcionarios$Salario)
+print(valor_minimo_salario)
+```
+<h4>5.3 - Quantidade Ideal de Classes para Tabela de Frequência - Regra de Stuges:</h4>
+```{r}
+total_salarios <- length(Dados_Funcionarios$Salario)
+K <- round(1 + (3.3 * log10(total_salarios)))
+print(K)
+```
+<h4>5.4 - Histograma do Salário de Funcionários:</h4>
+```{r}
+hist(Dados_Funcionarios$Salario,
+     breaks = K,
+     main = "Histograma Do Salário de Funcionários",
+     xlab = "Salário",
+     ylab = "Frequência",
+     col = "lightblue",
+     border = "black",
+     ylim = c(0, 20)) 
+```
+<p>Podemos observar que a média salarial sendo de **R$23,3 Mil** não reflete a realidade salarial da maioria dos funcionário uma vez que as maiores frequências se encontram na faixa de **R$5 a R$15 mil**, podemos observar que o valor médio dispara apenas por poucos valores altos envolvidos no contexto, mas ao analisar o gráfico temos uma melhor visão de que a média geral não reflete a realidade.</p>
+
+___
+<h2>6 - Análise da Relação entre o Estado Civil dos Funcionários e seu Grau de Instrução</h2>
+
+<h4>6.1 -Tabela de Contingência Relacionando o Estado Civil e o Grau de Instrução:</h4>
+
+```{r}
+tabela_contigencia_estadoCivil_grauInstrucao <- table(Dados_Funcionarios$Est.civil,
+                                                      Dados_Funcionarios$Inst)
+print(tabela_contigencia_estadoCivil_grauInstrucao)
+```
+<p>Podemos observar uma disparidade relevante entre os funcionários de formação até  **2° grau** onde o dobro deles é casado. Contudo, nas demais, essa disparidade não se apresenta, nos de **1°grau** temos uma diferença de apenas 1 entre os casados e solteiros. Nos de formação superior sequer há diferência. Talvez isso possa sugerir uma relação entre a idade dos funcionários com seu grau de instrução, contudo apenas com base nesses dados não há resultados conclusivos.</p>
+<h4>6.2 - Gráfico de Relação entre Estado Civil e Grau de Instrução:</h4>
+```{r}
+cores <- rainbow(nrow(tabela_contigencia_estadoCivil_grauInstrucao))
+
+barplot(tabela_contigencia_estadoCivil_grauInstrucao,
+        beside = FALSE,
+        main = "Gráfico de Cruzamento do Estado Civil e Grau de Instrução Sobrepostos",
+        xlab = "Grau de Instrução",
+        ylab = "Frequência",
+        ylim = c(0, 20),
+        col = cores)
+
+legend("topright",
+       legend = rownames(tabela_contigencia_estadoCivil_grauInstrucao),
+       fill = cores,
+       title = "Estado Civil")
+
+barplot(tabela_contigencia_estadoCivil_grauInstrucao,
+        beside = TRUE,
+        main = "Gráfico de Cruzamento do Estado Civil e Grau de Instrução Lado a Lado",
+        xlab = "Grau de Instrução",
+        ylab = "Frequência",
+        ylim = c(0, 20),
+        col = cores)
+
+legend("topright",
+       legend = rownames(tabela_contigencia_estadoCivil_grauInstrucao),
+       fill = cores,
+       title = "Estado Civil")
+
+```
+<p>Os gráficos apenas seguem a reforçar a análise anterior. Pode haver uma relação, contudo sem resultados conclusivos dada a quantidade de dados.</p>
+___
+<h2>7 - Análise de Relação entre Grau de Instrução e Salário dos Funcionários</h2>
+
+<h4>7.1 - Boxplot para Verificação de Relação entre as Variáveis:</h4>
+```{r}
+boxplot(Dados_Funcionarios$Salario ~ Dados_Funcionarios$Inst,
+        main = "Distribuição Salarial por Grau de Instrução",
+        xlab = "Grau de Instrução",
+        ylab = "Salário",
+        col = "lightblue",
+        notch = FALSE)
+```
+<p>O boxplot evidencia uma relação clara entre o grau de instrução dos funcionários com seus respectivos salários. Podemos observar que para cada grau de instrução, mesmo o menor valor desse, sempre acaba por ser aproximo do valor máximo de salário do grau de instrução mais baixo que o antecede, além do que os funcionários de nível superior se destacam com  os salários mais altos, enquanto que os de **2°grau** ficam com uma faixa mais próxima ao meio e os de **1° grau** com os mais baixos, sequer chegando aos **R$10 mil** que é menos que a média dos de **2° grau**.</p>
+
+<h4>7.2 - Média e Desvio Padrão dos Salários para cada Grau de Instrução:
+<h6>Média<h6>
+```{r}
+media_salaria_por_grau_instrucao <- tapply(Dados_Funcionarios$Salario, Dados_Funcionarios$Inst, mean, na.rm=TRUE) 
+print(media_salaria_por_grau_instrucao)
+```
+<h6>Desvio Padrão</h6>
+```{r}
+desvio_padrao_por_grau_instrucao <- tapply(Dados_Funcionarios$Salario, Dados_Funcionarios$Inst, sd, na.rm=TRUE) 
+print(desvio_padrao_por_grau_instrucao)
+```
+<p>Podemos observar mais claramente os resultados analisados no boxplot, agora com a média salarial para cada grau de instrução. Temos uma diferença de mais de **R$3 mil** entre as médias salariais dos funcionário de grau de instrução até o **1° grau** e os de **2° grau**. Já entre os de **2° grau** e **3° grau** a diferença é ainda maior, quase **R$5 mil**. Contudo, podemos observar também que quanto maior o grau de instrução menos homogêneos são os valores salariais, ou seja, não são tão bem padronizados quanto nos graus de instrução menores, mas ainda sim esses tem um desvio padrão de apenas quase **1,6** a mais em relação aos funcionários que cursaram apenas até o **1° grau**.</p>
+___
+<h2>8 - Calculando a Idade a Partir das variaveis Anos e Meses</h2>
+<h4>8.1 - Anos+Meses/12:</h4>
+```{r}
+Dados_Funcionarios$Idade <- Dados_Funcionarios$Anos+(Dados_Funcionarios$Meses/12) 
+Dados_Funcionarios
+```
+___
+<h2>9 - Análise da Relação entre as Variáveis Idade e Salário</h2>
+<h4>9.1 - Gráfico de relação entre as variáveis:</h4>
+```{r}
+plot(Dados_Funcionarios$Salario ~ Dados_Funcionarios$Idade,
+        main = "Relação entre Salário e Idade",
+        xlab = "Idade",
+        ylab = "Salário",
+        col="blue")
+```
+<p>A partir dos pontos apresentados no gráfico, não parece haver uma relação direta entre a idade de um funcionário e seu salário uma vez que vemos pontos muito espalhados e sem um crescimento linear direto. O máximo que podemos observar é que os dois maiores salários se encontram em posso de funcionários na faixa de **40 a 50** anos.</p>
+
+<h4>valor de Correlação entre as Variáveis Idade e salário:</h4>
+```{r}
+correlacao <- cor(Dados_Funcionarios$Idade, Dados_Funcionarios$Salario, use = "complete.obs")
+print(correlacao)
+```
+<p>Temos mais nitidamente, agora com um valor numérico, a evidência de que não há uma correlação forte entre essas duas variáveis, evidenciando assim o afirmado acima. Uma valor de **36%** de relação mostra que pode até haver uma relação em determinados pontos, mas que é fraca e sem grande embasamento.</p>
